@@ -33,6 +33,8 @@
     "react-native-mask-input": "^1.0.3",
     "react-native-openalpr": "^2.1.1",
     "react-native-permissions": "^2.2.2",
+    "react-native-phone-input": "^1.2.1",
+    "react-native-phone-number-input": "^2.1.0",
     "react-native-progress": "^5.0.0",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.6",
@@ -42,7 +44,8 @@
     "react-native-vector-icons": "^7.0.0",
     "react-native-version-number": "^0.3.6",
     "react-native-webview": "^10.9.0",
-    "react-navigation-stack": "^2.8.2"
+    "react-navigation-stack": "^2.8.2",
+    "react-phone-number-input": "^3.1.38"
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",

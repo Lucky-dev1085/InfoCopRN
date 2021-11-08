@@ -655,5 +655,107 @@ export default class API_Manager {
             CompletionHandler(sr);
         }
     }
+    GetUserProfile = async (params, CompletionHandler) => {
+        console.log ("Starting GetUserStatus Process");
+        let dt = new Date()
+        let apikey = (await SharedUtility.GetSharedAPIKey()).getAPIKey ("NULL");
+        // alert(apikey)
+        let serverip = SharedUtility.sharedSettingModel.getServerAddr ("NULL");
+        // alert(serverip)
+        let _url = "https://" + serverip + "/api/Login/ResetPassword?" 
+         let pms = 'EmpID=' + params.EmpID
+      + '&DeviceCodeName=' + params.DeviceCodeName
+      + '&Dept=' + params.Dept
+      + '&CallType=' + params.CallType
+    //   + '&CurrentPassword=' + params.CurrentPassword
+    //   + '&CurrentPIN=' + params.CurrentPIN
+    
+      let __url = _url + pms
+        // alert(__url)
+        // let sr =  await this.postMakeRequestResonse (__url, apikey, params);
+
+        let sm = SharedUtility.sharedSettingModel;
+        
+        // if (sm != null) {
+            
+            let headers =  {"api-key": apikey, 
+            "dmvApi-key": '{b09eafe2-6d5q-4178-a80d-wq841991f631}', 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+                console.log("----url-----"  + apikey)
+                console.log(__url)
+                fetch(__url, {
+                    body: pms,
+                    headers: headers,
+                    method: 'POST'
+                })
+                .then(function(response) {
+                    console.log('response:', response)
+                    return response.json()
+                }).then(function(data) {
+                    console.log(data)
+                    CompletionHandler(data)
+                    
+                }).catch(function (err) {
+                    // console.log('err', err)
+                    alert(JSON.stringify(err))
+                    // callBack(null, err)
+                }).then(function(){
+                    console.log('final callback')
+                });
+    }
+
+    SaveUserProfile = async (params, CompletionHandler) => {
+        console.log ("Starting GetUserStatus Process");
+        let dt = new Date()
+        let apikey = (await SharedUtility.GetSharedAPIKey()).getAPIKey ("NULL");
+        // alert(apikey)
+        let serverip = SharedUtility.sharedSettingModel.getServerAddr ("NULL");
+        // alert(serverip)
+        let _url = "https://" + serverip + "/api/Login/ResetPassword?" 
+         let pms = 'EmpID=' + params.EmpID
+      + '&DeviceCodeName=' + params.DeviceCodeName
+      + '&Dept=' + params.Dept
+      + '&CallType=' + params.CallType
+      + '&FirstName=' + params.FirstName
+      + '&MiddleName=' + params.MiddleName
+      + '&LastName=' + params.LastName
+      + '&CellPhone=' + params.CellPhone
+      + '&EmailID=' + params.EmailID
+    
+      let __url = _url + pms
+        // alert(__url)
+        // let sr =  await this.postMakeRequestResonse (__url, apikey, params);
+
+        let sm = SharedUtility.sharedSettingModel;
+        
+        // if (sm != null) {
+            
+            let headers =  {"api-key": apikey, 
+            "dmvApi-key": '{b09eafe2-6d5q-4178-a80d-wq841991f631}', 
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+                console.log("----url-----"  + apikey)
+                console.log(__url)
+                fetch(__url, {
+                    body: pms,
+                    headers: headers,
+                    method: 'POST'
+                })
+                .then(function(response) {
+                    console.log('response:', response)
+                    return response.json()
+                }).then(function(data) {
+                    console.log(data)
+                    CompletionHandler(data)
+                    
+                }).catch(function (err) {
+                    // console.log('err', err)
+                    alert(JSON.stringify(err))
+                    // callBack(null, err)
+                }).then(function(){
+                    console.log('final callback')
+                });
+    }
 
 }

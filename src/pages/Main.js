@@ -42,6 +42,7 @@ import Utils from '../utils/Utils';
 import HAZMATView from './MainTabPanel/HAZMATView';
 
 import HistoryView from './MainTabPanel/HistoryView';
+import UserProfileView from './MainTabPanel/UserProfileView';
 
 const IconEdit = <Icon name="edit" size={24} color="white" />;
 const IconCopy = <Icon name="copy1" size={24} color="white" />;
@@ -55,7 +56,7 @@ export function MainTopHeader({
   onTapMoreMenu,
   onTapLogOff,
 }) {
-  const [isShowMenu, setIsShowMenu,isShowSetting] = useState(false);
+  const [isShowMenu, setIsShowMenu, isShowSetting] = useState(false);
 
   const onTapMenuItem = (index) => {
     if (index == 0) {
@@ -101,10 +102,10 @@ export function MainTopHeader({
           justifyContent: 'flex-end',
         }}>
         <TouchableOpacity
-            onPress={() => {
-              onTapSettings();
-            }}
-            style={{ paddingHorizontal: 10, paddingVertical: 10 }}>
+          onPress={() => {
+            onTapSettings();
+          }}
+          style={{ paddingHorizontal: 10, paddingVertical: 10 }}>
           {IconSetting}
         </TouchableOpacity>
         <TouchableOpacity
@@ -234,7 +235,7 @@ class Main extends React.Component {
           return true;
         } else {
           if (this.state.showResponseView) {
-            this.setState({showResponseView: false});
+            this.setState({ showResponseView: false });
           } else {
             this.setState({
               isShowPlateView: false,
@@ -301,13 +302,22 @@ class Main extends React.Component {
     } else if (index == 8) {
       this.actionHazmat();
     } else if (index == 9) {
+      let dict = JSON.parse(await SharedUtility.getString('dict'));
+      
+      this.setState({
+        selMainBtnIndex: 10,
+        isShowPlateView: false,
+        isShowMainBtnGroup: false,
+        initDataAAVC: dict
+      });
+    } else if (index == 10) {
       DeviceBrightness.setBrightnessLevel(
         this.state.appBrightness > 0.6 ? 0.2 : 1,
       );
       this.setState({
         appBrightness: this.state.appBrightness > 0.6 ? 0.1 : 1,
       });
-    } else if (index == 10) {
+    } else if (index == 11) {
       let _am = JSON.parse(await SharedUtility.getString('am'));
       let am = new AccountModel();
       am.Pin = _am.pin;
@@ -341,48 +351,52 @@ class Main extends React.Component {
     // NumberPlateScanner().then((result) => {
     //   // alert(JSON.stringify(result));
     // });
-    this.props.navigation.navigate("plate-scan", { onGoBack: (plateNumber) => {
-      if (plateNumber) {
-        global.plateNumber = plateNumber;
-        this.setState({
-          selMainBtnIndex: 0,
-          isShowPlateView: true,
-          isShowMainBtnGroup: false,
-        });
+    this.props.navigation.navigate("plate-scan", {
+      onGoBack: (plateNumber) => {
+        if (plateNumber) {
+          global.plateNumber = plateNumber;
+          this.setState({
+            selMainBtnIndex: 0,
+            isShowPlateView: true,
+            isShowMainBtnGroup: false,
+          });
+        }
       }
-    }});
+    });
   };
 
   openDLScanPage = () => {
-    this.props.navigation.navigate("dl-scan", { onGoBack: (scanData) => {
-      let resultWithoutSpace = scanData.split('\n').join('');
-      var idValue = 'NA'
-      var stateValue = 'NA'
+    this.props.navigation.navigate("dl-scan", {
+      onGoBack: (scanData) => {
+        let resultWithoutSpace = scanData.split('\n').join('');
+        var idValue = 'NA'
+        var stateValue = 'NA'
 
-      let _tempArray = resultWithoutSpace.split('DAQ')
-      let _tempArray2 = resultWithoutSpace.split('DAJ')
-      if (_tempArray.length > 1) {
-        if (_tempArray[1].length > 15) {
-          idValue = _tempArray[1].replace('\n', '').substring(0, 15)
+        let _tempArray = resultWithoutSpace.split('DAQ')
+        let _tempArray2 = resultWithoutSpace.split('DAJ')
+        if (_tempArray.length > 1) {
+          if (_tempArray[1].length > 15) {
+            idValue = _tempArray[1].replace('\n', '').substring(0, 15)
+          }
         }
-      }
-      if (_tempArray2.length > 1) {
-        if (_tempArray2[1].length > 2) {
-          stateValue = _tempArray2[1].substring(0, 2)
+        if (_tempArray2.length > 1) {
+          if (_tempArray2[1].length > 2) {
+            stateValue = _tempArray2[1].substring(0, 2)
+          }
         }
-      }
 
-      this.setState({
-        licenceImage: '',
-        licenceValue: idValue,
-        licenceState: stateValue,
-        isLicenceData: true,
-        isShowPlateView: true,
-        isShowMainBtnGroup: false,
-      }, () => {
-        this.actionDL(false)
-      })
-    }});
+        this.setState({
+          licenceImage: '',
+          licenceValue: idValue,
+          licenceState: stateValue,
+          isLicenceData: true,
+          isShowPlateView: true,
+          isShowMainBtnGroup: false,
+        }, () => {
+          this.actionDL(false)
+        })
+      }
+    });
   }
 
   closeLicenceView = () => {
@@ -410,26 +424,26 @@ class Main extends React.Component {
   };
 
   actionDL = (isClear) => {
-    if(isClear) {
+    if (isClear) {
       this.setState({
-      licenceState: '',
-      licenceValue: ''
-    }, () => {
+        licenceState: '',
+        licenceValue: ''
+      }, () => {
         this.setState({
+          selMainBtnIndex: 4,
+          isShowPlateView: true,
+          isShowMainBtnGroup: false
+        });
+      });
+    }
+    else {
+      this.setState({
         selMainBtnIndex: 4,
         isShowPlateView: true,
         isShowMainBtnGroup: false
       });
-    });
     }
-    else {
-this.setState({
-      selMainBtnIndex: 4,
-      isShowPlateView: true,
-      isShowMainBtnGroup: false
-    });
-    }
-    
+
   };
 
   actionStatus = () => {
@@ -513,7 +527,7 @@ this.setState({
         style={{
           height: 70,
         }}
-        onPress = {async () => {
+        onPress={async () => {
           showPageLoader(true);
           let result = await this.getRunResult(item.RIN);
           showPageLoader(false);
@@ -699,12 +713,12 @@ this.setState({
         DMV += this.BuildRspLn(
           'VEH:',
           DMVResp?.VehYear +
-            ' ' +
-            DMVResp?.VehMake +
-            ' ' +
-            DMVResp?.VehModel +
-            ' ' +
-            DMVResp?.VehColor,
+          ' ' +
+          DMVResp?.VehMake +
+          ' ' +
+          DMVResp?.VehModel +
+          ' ' +
+          DMVResp?.VehColor,
           true,
         );
         DMV += this.BuildRspLn('LIY:', DMVResp?.VehYear, true);
@@ -712,11 +726,11 @@ this.setState({
         count++;
         console.log(
           'End of While in one Loop Check result >>> Key:' +
-            Key +
-            '   DMV : ' +
-            DMV +
-            '   RSP : ' +
-            Rsp,
+          Key +
+          '   DMV : ' +
+          DMV +
+          '   RSP : ' +
+          Rsp,
         );
         //Thread.Sleep(1000);
         console.log('Rsp.Length >> : ', Rsp.Length);
@@ -847,7 +861,7 @@ this.setState({
           returnObject.imgPhoto = require('../../assets/images/defaultimg.png');
         } else {
           // from base64 to image
-          returnObject.imgPhoto = {uri: `data:image/png;base64,${temp}`};
+          returnObject.imgPhoto = { uri: `data:image/png;base64,${temp}` };
           // imgPhoto.Image = image;
         }
 
@@ -886,7 +900,7 @@ this.setState({
           <MainTopHeader
             onTapEdit={() => {
               if (this.state.plateResObj && this.state.selTabIndex === 1) {
-                this.props.navigation.navigate("notes", {plateResObj: this.state.plateResObj})
+                this.props.navigation.navigate("notes", { plateResObj: this.state.plateResObj })
               }
             }}
             onTapCopy={async () => {
@@ -902,7 +916,7 @@ this.setState({
               }
             }}
             onTapSettings={async () => {
-              this.setState({isShowSetting: true});
+              this.setState({ isShowSetting: true });
             }}
             onTapLogOff={() => {
               this.logOff();
@@ -998,7 +1012,7 @@ this.setState({
                               // webViewRes: null,
                               // TODO : 1. init response view with resObj:
                               //        2. moveTabBar to response view.
-                              
+
                               if (this.state.isShowMainBtnGroup == false
                                 && this.state.isShowPlateView == true) {
                                 this.setState({
@@ -1042,8 +1056,6 @@ this.setState({
                             }}
                           />
                         )}
-
-
 
                         {this.state.selMainBtnIndex == 3 && (
                           <VINView
@@ -1101,6 +1113,7 @@ this.setState({
                             }}
                           />
                         )}
+
                       </View>
                       <View
                         style={{
@@ -1128,6 +1141,22 @@ this.setState({
                 </>
               )}
 
+            {this.state.selMainBtnIndex == 10 &&
+              this.state.isShowMainBtnGroup == false && (
+              <UserProfileView
+                initDataAAVC={this.state.initDataAAVC}
+                onMoveToResponse={() => {
+                  this.setState({
+                    isShowMainBtnGroup: true
+                  })
+                }}
+                onCancel={() => {
+                  this.setState({
+                    isShowMainBtnGroup: true
+                  });
+                }}
+              />
+            )}
             {this.state.selMainBtnIndex == 1 &&
               this.state.isShowMainBtnGroup == false && <ALPRScanView />}
 
@@ -1139,13 +1168,13 @@ this.setState({
 
             {this.state.selMainBtnIndex == 6 &&
               this.state.isShowMainBtnGroup == false && !this.state.showResponseView &&
-              <HistoryView 
+              <HistoryView
                 onMoveToResponse={(showResponseView, resObj) => {
-                  this.setState({showResponseView: showResponseView, plateResObj: resObj});
+                  this.setState({ showResponseView: showResponseView, plateResObj: resObj });
                 }} />}
 
             {this.state.showResponseView && this.state.plateResObj !== null &&
-              <View style={{flex: 1, marginHorizontal: 10, marginTop: 5}}>
+              <View style={{ flex: 1, marginHorizontal: 10, marginTop: 5 }}>
                 <ResponseView resObj={this.state.plateResObj} />
               </View>}
 

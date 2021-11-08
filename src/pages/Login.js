@@ -57,9 +57,9 @@ class Login extends React.Component {
     this.backButtonPressedInMain = false;
     this.apiManager = new API_Manager();
     this.state = {
-      userId: '',
-      pwd: '',
-      pin: '',
+      userId: 'MOBILE1',
+      pwd: 'Demo1010',
+      pin: '202020',
       imgMarkImage: null,
       showDisclaimerModal: true,
       isCheckedTouchID: false,

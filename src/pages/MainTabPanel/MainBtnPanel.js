@@ -26,6 +26,7 @@ export const btnTitles = [
   // 'FACIAL',
   'STATUS',
   'HAZMAT',
+  'User Profile',
   'Day/Night',
   'Reset Password'
 ];
@@ -72,6 +73,11 @@ export const imagesBtn = [
     id: 9,
     src: require('../../../assets/images/circle_hazmat.png'),
     title: 'HAZMAT',
+  },
+  {
+    id: 12,
+    src: require('../../../assets/images/circle_user_profile.png'),
+    title: 'User Profile',
   },
   {
     id: 10,
