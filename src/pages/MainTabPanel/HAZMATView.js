@@ -119,7 +119,13 @@ class HAZMATView extends React.Component {
               }}
               onPress={() => {
                 if (this.state.searchText == '') {
-                  alert('Please enter text');
+                  Alert.alert(
+                    'Please enter text',
+                    '',
+                    [
+                      { text: 'OK', onPress: () => console.log('OK Pressed') },
+                    ]
+                  );
                 } else {
                   this.getHazmat();
                 }

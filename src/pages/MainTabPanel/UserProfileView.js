@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Alert,
   Platform,
+  ToastAndroid,
+  AlertIOS
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from '../../utils/Constants';
@@ -153,6 +155,12 @@ class UserProfileView extends React.Component {
       showPageLoader(false);
 
       if (response.Result) {
+        if (Platform.OS === 'android') {
+          ToastAndroid.show("User Profile Saved.", ToastAndroid.SHORT)
+        } else {
+          AlertIOS.alert("User Profile Saved.");
+        }
+
         this.props.onMoveToResponse(response);
       } else {
         Alert.alert(
